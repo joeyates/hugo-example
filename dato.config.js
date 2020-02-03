@@ -29,24 +29,26 @@ module.exports = (dato, root) => {
   });
 
   root.directory('content/episode', dir => {
-    dato.episodes.sort(by('-id')).forEach((episode, i) => {
-      dir.createPost(`episode-${episode.slug || episode.id}.md`, 'toml', {
-        frontmatter: {
-          title: episode.title,
-          episodenumber: episode.episodeNumber,
-          paletteurl: episode.image && episode.image.url({ auto: 'enhance', palette: 'json' }),
-          imageurl: episode.image && episode.image.url(),
-          thumbnailurl: episode.image && episode.image.url({ w: 500, h: 280, fit: 'crop', auto: 'enhance', fm: 'jpg' }),
-          date: episode.firstAired.toMap(),
-          weight: i,
-          rating: episode.rating,
-          director: episode.director,
-          category: episode.season.name,
-        },
-        content: episode.description,
-      });
-    });
-  });
+    Array(200).fill().map((_, repeat) => {
+      dato.episodes.sort(by('-id')).forEach((episode, i) => {
+        dir.createPost(`episode-${repeat + 1}-${episode.slug || episode.id}.md`, 'toml', {
+          frontmatter: {
+            title: episode.title,
+            episodenumber: episode.episodeNumber,
+            paletteurl: episode.image && episode.image.url({ auto: 'enhance', palette: 'json' }),
+            imageurl: episode.image && episode.image.url(),
+            thumbnailurl: episode.image && episode.image.url({ w: 500, h: 280, fit: 'crop', auto: 'enhance', fm: 'jpg' }),
+            date: episode.firstAired.toMap(),
+            weight: i,
+            rating: episode.rating,
+            director: episode.director,
+            category: episode.season.name,
+          },
+          content: episode.description,
+        })
+      })
+    })
+  })
 
   root.directory('content/character', dir => {
     dato.characters.forEach(character => {
